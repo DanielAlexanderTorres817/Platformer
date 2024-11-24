@@ -1,17 +1,17 @@
-#include "Title.h"
+#include "lose.h"
 #include "Utility.h"
 
-#define LEVEL_WIDTH 14
-#define LEVEL_HEIGHT 8
+#define LEVEL_WIDTH 21
+#define LEVEL_HEIGHT 17
 
 constexpr char PLAYER_IDLE_FILEPATH[] = "assets/player/Idle.png",
 PLAYER_RUN_FILEPATH[] = "assets/player/Run.png",
 PLATFORM_FILEPATH[] = "assets/tilesheet.png",
 ENEMY_FILEPATH[] = "assets/enemy/Idle.png";
 
-unsigned int TITLE_DATA[] =
+unsigned int LOSE_DATA[] =
 {
-     25, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+      0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
      0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
      0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
      0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
@@ -20,7 +20,7 @@ unsigned int TITLE_DATA[] =
      0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
      0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
      0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-     0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 25,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
      0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
      0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
      0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
@@ -31,10 +31,10 @@ unsigned int TITLE_DATA[] =
 };
 
 //--------------------- GLOBALS ---------------------//
-GLuint g_font_texture_id;
+GLuint l_font_texture_id;
 
 
-Title::~Title()
+Lose::~Lose()
 {
     delete[] m_game_state.enemies;
     delete    m_game_state.player;
@@ -43,11 +43,11 @@ Title::~Title()
     Mix_FreeMusic(m_game_state.bgm);
 }
 
-void Title::initialise()
+void Lose::initialise()
 {
-    g_font_texture_id = Utility::load_texture("assets/font1.png");
+    l_font_texture_id = Utility::load_texture("assets/font1.png");
     GLuint map_texture_id = Utility::load_texture(PLATFORM_FILEPATH);
-    m_game_state.map = new Map(21, 17, TITLE_DATA, map_texture_id, 1, 7, 6);
+    m_game_state.map = new Map(LEVEL_WIDTH, LEVEL_HEIGHT, LOSE_DATA, map_texture_id, 1, 7, 6);
 
     GLuint player_idle_texture_id = Utility::load_texture(PLAYER_IDLE_FILEPATH);
     GLuint player_walk_texture_id = Utility::load_texture(PLAYER_RUN_FILEPATH);
@@ -131,12 +131,12 @@ void Title::initialise()
 
     m_game_state.bgm = Mix_LoadMUS("assets/bgm.mp3");
     Mix_PlayMusic(m_game_state.bgm, -1);
-    Mix_VolumeMusic(0.0f);
+    Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
 
     m_game_state.jump_sfx = Mix_LoadWAV("assets/jump.wav");
 }
 
-void Title::update(float delta_time)
+void Lose::update(float delta_time)
 {
     return;
     //m_game_state.player->update(delta_time, m_game_state.player, m_game_state.enemies, ENEMY_COUNT, m_game_state.map);
@@ -148,12 +148,11 @@ void Title::update(float delta_time)
 }
 
 
-void Title::render(ShaderProgram* g_shader_program)
+void Lose::render(ShaderProgram* g_shader_program)
 {
     m_game_state.map->render(g_shader_program);
-    Utility::draw_text(g_shader_program, g_font_texture_id, "INSERT EPIC TITLE HERE!", 0.3f, 0.0f, glm::vec3(-3.25f, 2.5f, 0.0f));
-    Utility::draw_text(g_shader_program, g_font_texture_id, "Collect this flower to win!", 0.3f, 0.0f, glm::vec3(-3.75f, 1.5f, 0.0f));
-    Utility::draw_text(g_shader_program, g_font_texture_id, "(press ENTER please)", 0.3f, 0.0f, glm::vec3(-2.75f, -2.5f, 0.0f));
+    Utility::draw_text(g_shader_program, l_font_texture_id, "You died lol", 0.3f, 0.0f, glm::vec3(3.4f, -2.0f, 0.0f));
+    Utility::draw_text(g_shader_program, l_font_texture_id, "(press Q )", 0.3f, 0.0f, glm::vec3(3.65f, -2.5f, 0.0f));
 
     //m_game_state.player->render(g_shader_program);
     //for (int i = 0; i < m_number_of_enemies; i++)

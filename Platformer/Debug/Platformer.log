@@ -1,3 +1,9 @@
 ﻿  LevelA.cpp
-C:\Users\User\source\repos\Platformer\Platformer\LevelA.cpp(133,21): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  LevelB.cpp
+  LevelC.cpp
+  Title.cpp
+C:\Users\User\source\repos\Platformer\Platformer\Title.cpp(134,21): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  lose.cpp
+  win.cpp
+  Generating Code...
   Platformer.vcxproj -> C:\Users\User\source\repos\Platformer\Debug\Platformer.exe

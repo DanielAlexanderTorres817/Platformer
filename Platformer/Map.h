@@ -24,7 +24,10 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
 
+
 class Map {
+public:
+    bool win_status = false;
 private:
     int m_width;
     int m_height;

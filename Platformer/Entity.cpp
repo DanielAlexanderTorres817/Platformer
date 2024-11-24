@@ -25,6 +25,10 @@ void Entity::ai_activate(Entity *player)
             ai_guard(player);
             break;
             
+        case JUMPER:
+            //set_jumping_power(3.0f);
+            if (get_collided_bottom()) { jump(); }
+            break;
         default:
             break;
     }
@@ -39,10 +43,10 @@ void Entity::ai_guard(Entity* player)
 {
     switch (m_ai_state) {
     case IDLING:
-        if (glm::distance(m_position, player->get_position()) < 1.0f) {
+        if (glm::distance(m_position, player->get_position()) < 3.0f) {
             m_ai_state = WALKING;
-            break;
         }
+        break;
     case WALKING:
         if (m_position.x > player->get_position().x) {
             m_movement = glm::vec3(-0.75f, 0.0f, 0.0f);
@@ -161,6 +165,7 @@ void Entity::draw_sprite_from_texture_atlas(ShaderProgram* shaderProgram, GLuint
 
 bool const Entity::check_collision(Entity* other) const
 {
+    if (other->m_is_active == false) { return false; }
     float x_distance = fabs(m_position.x - other->m_position.x) - ((m_width + other->m_width) / 2.0f);
     float y_distance = fabs(m_position.y - other->m_position.y) - ((m_height + other->m_height) / 2.0f);
 

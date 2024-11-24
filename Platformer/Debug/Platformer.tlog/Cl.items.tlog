@@ -1,8 +1,12 @@
 C:\Users\User\source\repos\Platformer\Platformer\Entity.cpp;C:\Users\User\source\repos\Platformer\Platformer\Debug\Entity.obj
 C:\Users\User\source\repos\Platformer\Platformer\LevelA.cpp;C:\Users\User\source\repos\Platformer\Platformer\Debug\LevelA.obj
+C:\Users\User\source\repos\Platformer\Platformer\LevelB.cpp;C:\Users\User\source\repos\Platformer\Platformer\Debug\LevelB.obj
+C:\Users\User\source\repos\Platformer\Platformer\LevelC.cpp;C:\Users\User\source\repos\Platformer\Platformer\Debug\LevelC.obj
+C:\Users\User\source\repos\Platformer\Platformer\lose.cpp;C:\Users\User\source\repos\Platformer\Platformer\Debug\lose.obj
 C:\Users\User\source\repos\Platformer\Platformer\main.cpp;C:\Users\User\source\repos\Platformer\Platformer\Debug\main.obj
 C:\Users\User\source\repos\Platformer\Platformer\Map.cpp;C:\Users\User\source\repos\Platformer\Platformer\Debug\Map.obj
 C:\Users\User\source\repos\Platformer\Platformer\Scene.cpp;C:\Users\User\source\repos\Platformer\Platformer\Debug\Scene.obj
 C:\Users\User\source\repos\Platformer\Platformer\ShaderProgram.cpp;C:\Users\User\source\repos\Platformer\Platformer\Debug\ShaderProgram.obj
 C:\Users\User\source\repos\Platformer\Platformer\Title.cpp;C:\Users\User\source\repos\Platformer\Platformer\Debug\Title.obj
 C:\Users\User\source\repos\Platformer\Platformer\Utility.cpp;C:\Users\User\source\repos\Platformer\Platformer\Debug\Utility.obj
+C:\Users\User\source\repos\Platformer\Platformer\win.cpp;C:\Users\User\source\repos\Platformer\Platformer\Debug\win.obj

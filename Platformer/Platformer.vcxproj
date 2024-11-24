@@ -135,21 +135,29 @@
   <ItemGroup>
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="LevelA.cpp" />
+    <ClCompile Include="LevelB.cpp" />
+    <ClCompile Include="LevelC.cpp" />
+    <ClCompile Include="lose.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Utility.cpp" />
+    <ClCompile Include="win.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h" />
     <ClInclude Include="LevelA.h" />
+    <ClInclude Include="LevelB.h" />
+    <ClInclude Include="LevelC.h" />
+    <ClInclude Include="lose.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Utility.h" />
+    <ClInclude Include="win.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

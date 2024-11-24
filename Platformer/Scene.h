@@ -31,7 +31,11 @@ struct GameState
     Mix_Chunk *jump_sfx;
     
     // ————— POINTERS TO OTHER SCENES ————— //
-    int next_scene_id;
+    int next_scene_id = 0;
+    bool change = false;
+    bool end = false;
+    bool subtract = false;
+    
 };
 
 class Scene {
@@ -48,6 +52,7 @@ public:
     virtual void render(ShaderProgram *program) = 0;
     
     // ————— GETTERS ————— //
-    GameState const get_state() const { return m_game_state;             }
+    GameState&  get_state()  { return m_game_state;             }
     int const get_number_of_enemies() const { return m_number_of_enemies; }
+    //int const gt_next_scene() const { return getnext_scene_id; }
 };

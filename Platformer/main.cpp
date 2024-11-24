@@ -24,6 +24,10 @@
 #include "Scene.h"
 #include "LevelA.h"
 #include "Title.h"
+#include "LevelB.h"
+#include "LevelC.h"
+#include "win.h"
+#include "lose.h"
 
 // ————— CONSTANTS ————— //
 constexpr int WINDOW_WIDTH  = 640 * 1.5,
@@ -50,10 +54,14 @@ enum AppStatus { RUNNING, TERMINATED };
 Scene *g_current_scene;
 LevelA *g_level_a;
 Title *g_title;
-
-Scene* g_levels[2];
+LevelB* g_level_b;
+LevelC* g_level_c;
+Lose* g_lose;
+Win* g_win;
+Scene* g_levels[6];
 
 SDL_Window* g_display_window;
+GLuint font;
 
 AppStatus g_app_status = RUNNING;
 ShaderProgram g_shader_program;
@@ -61,6 +69,8 @@ glm::mat4 g_view_matrix, g_projection_matrix;
 
 float g_previous_ticks = 0.0f;
 float g_accumulator = 0.0f;
+
+int lives = 3;
 
 void switch_to_scene(Scene *scene)
 {
@@ -120,15 +130,27 @@ void initialise()
 
     
     
-    // ————— LEVEL A SETUP ————— //
-    g_level_a = new LevelA();
+    // ————— LEVEL SETUP ————— //
+    
     g_title = new Title();
+    g_level_a = new LevelA();
+    g_level_b = new LevelB();
+    g_level_c = new LevelC();
+    g_win = new Win();
+    g_lose = new Lose();
 
     g_levels[0] = g_title;
     g_levels[1] = g_level_a; 
+    g_levels[2] = g_level_b;
+    g_levels[3] = g_level_c;
+    g_levels[4] = g_lose;
+    g_levels[5] = g_win;
+
+    
+
 
     switch_to_scene(g_levels[0]);
-
+    font = Utility::load_texture("assets/font1.png");
     
 
     
@@ -202,7 +224,15 @@ void process_input()
 
     if (key_state[SDL_SCANCODE_RETURN] && g_title_flag) {
         g_title_flag = false;
+        
         switch_to_scene(g_levels[1]);
+    }
+    if (key_state[SDL_SCANCODE_K]) {
+        lives = 0;
+    }
+    if (key_state[SDL_SCANCODE_J]) {
+        g_current_scene->get_state().map->win_status = true;
+        switch_to_scene(g_levels[5]);
     }
      
     if (glm::length( g_current_scene->get_state().player->get_movement()) > 1.0f)
@@ -212,7 +242,7 @@ void process_input()
 
 void update()
 {
-    if (g_title_flag) { return; }
+    if (g_title_flag || g_current_scene->get_state().end == true || g_current_scene->get_state().map->win_status == true) { return; }
     // ————— DELTA TIME / FIXED TIME STEP CALCULATION ————— //
     float ticks = (float)SDL_GetTicks() / MILLISECONDS_IN_SECOND;
     float delta_time = ticks - g_previous_ticks;
@@ -231,6 +261,23 @@ void update()
     while (delta_time >= FIXED_TIMESTEP) {
         // ————— UPDATING THE SCENE (i.e. map, character, enemies...) ————— //
         g_current_scene->update(FIXED_TIMESTEP);
+        if (g_current_scene->get_state().subtract) {
+            lives--; 
+            g_current_scene->get_state().subtract = false;
+        }
+
+        if (lives <= 0) {
+            g_current_scene->get_state().end = true;
+        }
+
+        if (g_current_scene->get_state().end == true) {
+            switch_to_scene(g_levels[4]);
+        }
+
+        if (g_current_scene->get_state().map->win_status == true) {
+            switch_to_scene(g_levels[5]);
+        }
+
         
         delta_time -= FIXED_TIMESTEP;
     }
@@ -240,6 +287,8 @@ void update()
     
     // ————— PLAYER CAMERA ————— //
     g_view_matrix = glm::mat4(1.0f);
+    //g_view_matrix = glm::translate(g_view_matrix, glm::vec3(-g_current_scene->get_state().player->get_position().x, -g_current_scene->get_state().player->get_position().y, 0));
+
     
     if (g_current_scene->get_state().player->get_position().x > LEVEL1_LEFT_EDGE) {
         g_view_matrix = glm::translate(g_view_matrix, glm::vec3(-g_current_scene->get_state().player->get_position().x, 3.75, 0));
@@ -250,13 +299,20 @@ void update()
 
 void render()
 {
-    g_shader_program.set_view_matrix(g_view_matrix);
     
+    g_shader_program.set_view_matrix(g_view_matrix);
+
     glClear(GL_COLOR_BUFFER_BIT);
     
     // ————— RENDERING THE SCENE (i.e. map, character, enemies...) ————— //
     g_current_scene->render(&g_shader_program);
+    if (!g_title_flag) {
+        Utility::draw_text(&g_shader_program, font, "LIVES:" + std::to_string(lives), 0.3f, 0.0f,
+            g_current_scene->get_state().player->get_position() + glm::vec3(-1.0f, 0.5f, 0.0f));
+    }
     
+
+
     SDL_GL_SwapWindow(g_display_window);
 }
 
@@ -267,6 +323,7 @@ void shutdown()
     // ————— DELETING LEVEL A DATA (i.e. map, character, enemies...) ————— //
     delete g_level_a;
     delete g_title;
+    delete g_level_b;
 }
 
 // ————— GAME LOOP ————— //
@@ -278,7 +335,11 @@ int main(int argc, char* argv[])
     {
         process_input();
         update();
+
+        if (g_current_scene->get_state().next_scene_id != 0) switch_to_scene(g_levels[g_current_scene->get_state().next_scene_id]);
+
         render();
+        
     }
     
     shutdown();
